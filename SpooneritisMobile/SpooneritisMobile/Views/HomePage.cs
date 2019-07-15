@@ -25,7 +25,7 @@ namespace SpooneritisMobile.Views
 
         private async void GoToAddRiddle(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new AddRiddlePage());
+            await Navigation.PushAsync(new CreateRiddlePage());
         }
 
         private Button _createButton(string text, EventHandler action)

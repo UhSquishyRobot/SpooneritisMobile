@@ -1,28 +1,25 @@
-﻿using Newtonsoft.Json;
-using SpooneritisMobile.Models;
+﻿using SpooneritisMobile.Models;
+using SpooneritisMobile.Services;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 
 using Xamarin.Forms;
 
 namespace SpooneritisMobile.Views
 {
-	public class AddRiddlePage : ContentPage
+	public class CreateRiddlePage : ContentPage
 	{
         private Entry _descriptionEntry;
         private Entry _answerEntry;
         private Button _saveButton;
 
-        private readonly string _apiConnection = "http://10.0.2.2:3000/riddles";
+        private IRiddleService _riddleService;
 
-        private HttpClient _client = new HttpClient();
-
-        public AddRiddlePage ()
+        public CreateRiddlePage(IRiddleService riddleService)
 		{
+            _riddleService = riddleService;
+
             Title = "Add Riddle";
 
             StackLayout stackLayout = new StackLayout();
@@ -63,9 +60,7 @@ namespace SpooneritisMobile.Views
                 Answer = answer
             };
 
-            var riddleJson = new StringContent(JsonConvert.SerializeObject(riddle), Encoding.UTF8, "application/json");
-
-            var response = await _client.PostAsync(_apiConnection, riddleJson);
+            var response = await _riddleService.CreateRiddle(riddle);
 
             if (response.IsSuccessStatusCode)
             {
@@ -73,7 +68,7 @@ namespace SpooneritisMobile.Views
             }
             else
             {
-                await DisplayAlert(null, "Failure", "Fail");
+                await DisplayAlert(null, "Failure", "Dismiss");
             }
         }
 	}

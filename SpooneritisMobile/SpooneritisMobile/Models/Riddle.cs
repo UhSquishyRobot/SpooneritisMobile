@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SpooneritisMobile.Models
 {
-    class Riddle
+    public class Riddle
     {
         [JsonProperty("answer")]
         public IEnumerable<string> Answer;
