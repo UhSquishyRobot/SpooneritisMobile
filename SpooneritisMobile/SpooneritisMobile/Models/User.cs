@@ -2,7 +2,7 @@
 
 namespace SpooneritisMobile.Models
 {
-    class User
+    public class User
     {
         [JsonProperty("username")]
         public string Username { get; set; }

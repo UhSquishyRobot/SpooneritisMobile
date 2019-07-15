@@ -1,8 +1,6 @@
-﻿using Newtonsoft.Json;
-using SpooneritisMobile.Models;
+﻿using SpooneritisMobile.Models;
+using SpooneritisMobile.Services;
 using System;
-using System.Net.Http;
-using System.Text;
 using Xamarin.Forms;
 
 namespace SpooneritisMobile.Views
@@ -13,12 +11,12 @@ namespace SpooneritisMobile.Views
         private Entry _passwordEntry;
         private Button _saveButton;
 
-        private readonly string _apiConnection = "http://10.0.2.2:3000/users";
+        private IUserService _userService;
 
-        private HttpClient _client = new HttpClient();
-
-        public SignUpPage ()
+        public SignUpPage(IUserService userService)
 		{
+            _userService = userService;
+
             Title = "Sign Up";
 
             StackLayout stackLayout = new StackLayout();
@@ -57,9 +55,7 @@ namespace SpooneritisMobile.Views
                 Password = _passwordEntry.Text
             };
 
-            var userJson = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
-
-            var response = await _client.PostAsync(_apiConnection, userJson);
+            var response = await _userService.SignUp(user);
 
             if (response.IsSuccessStatusCode)
             {
