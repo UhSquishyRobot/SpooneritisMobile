@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SpooneritisMobile.Services
 {
-    public class BaseApiAccessor
+    public abstract class BaseApiAccessor
     {
         private static readonly string _baseUri = "http://10.0.2.2:3000/";
         private static readonly HttpClient _client = new HttpClient();
