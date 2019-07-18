@@ -9,5 +9,8 @@ namespace SpooneritisMobile.Models
 
         [JsonProperty("password")]
         public string Password { get; set; }
+
+        [JsonProperty("_id")]
+        public string Id { get; set; }
     }
 }

@@ -16,6 +16,7 @@ namespace SpooneritisMobile.Views
             stackLayout.Children.Add(_createButton("Sign Up", GoToSignUp));
             stackLayout.Children.Add(_createButton("Add Riddle", GoToAddRiddle));
             stackLayout.Children.Add(_createButton("All Riddles", GoToRiddleList));
+            stackLayout.Children.Add(_createButton("Sign In", GoToSignIn));
 
             Content = stackLayout;
 		}
@@ -33,6 +34,11 @@ namespace SpooneritisMobile.Views
         private async void GoToAddRiddle(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new CreateRiddlePage(new RiddleService()));
+        }
+
+        private async void GoToSignIn(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new SignInPage(new AuthService()));
         }
 
         private Button _createButton(string text, EventHandler action)
