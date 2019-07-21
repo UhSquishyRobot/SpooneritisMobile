@@ -9,7 +9,7 @@ namespace SpooneritisMobile.Services
 {
     public abstract class BaseApiAccessor
     {
-        private static readonly string _baseUri = "http://10.0.2.2:3000/";
+        private static readonly string _baseUri = "https://spooneritis.herokuapp.com/";
         private static readonly HttpClient _client = new HttpClient();
 
         public BaseApiAccessor()
@@ -20,26 +20,26 @@ namespace SpooneritisMobile.Services
         {
             StringContent json = JsonEncode(obj);
 
-            var jwt = Settings.Jwt;
-
-            if (!string.IsNullOrEmpty(jwt))
-            {
-                json.Headers.Add("Authorization", "Bearer " + Settings.Jwt);
-            }
+            MaybeAddAuth();
 
             return _client.PostAsync(_baseUri + url, json);
         }
 
         protected static Task<HttpResponseMessage> GetJson(string url)
         {
+            MaybeAddAuth();
+
+            return _client.GetAsync(_baseUri + url);
+        }
+
+        private static void MaybeAddAuth()
+        {
             var jwt = Settings.Jwt;
 
             if (!string.IsNullOrEmpty(jwt))
             {
-                _client.DefaultRequestHeaders.Add("Authorization", "Bearer " + Settings.Jwt);
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
             }
-
-            return _client.GetAsync(_baseUri + url);
         }
 
         private static StringContent JsonEncode<T>(T obj)
