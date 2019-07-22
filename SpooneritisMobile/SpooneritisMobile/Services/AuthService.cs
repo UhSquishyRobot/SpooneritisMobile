@@ -1,4 +1,6 @@
-﻿using SpooneritisMobile.Models;
+﻿using Newtonsoft.Json;
+using SpooneritisMobile.Helpers;
+using SpooneritisMobile.Models;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -8,9 +10,21 @@ namespace SpooneritisMobile.Services
     {
         private static readonly string _apiConnection = "users/authenticate";
 
-        public Task<HttpResponseMessage> Authenticate(User user)
+        public async Task<HttpResponseMessage> Authenticate(User user)
         {
-            return PostJson(_apiConnection, user);
+            var response = await PostJson(_apiConnection, user);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var authJson = await response.Content.ReadAsStringAsync();
+
+                AuthResponse authResponse = JsonConvert.DeserializeObject<AuthResponse>(authJson);
+
+                Settings.Jwt = authResponse.Token;
+                Settings.UserId = authResponse.User.Id;
+            }
+
+            return response;
         }
     }
 }

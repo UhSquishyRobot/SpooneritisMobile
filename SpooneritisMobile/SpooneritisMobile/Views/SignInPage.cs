@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using SpooneritisMobile.Helpers;
-using SpooneritisMobile.Models;
+﻿using SpooneritisMobile.Models;
 using SpooneritisMobile.Services;
 using System;
 
@@ -62,18 +60,11 @@ namespace SpooneritisMobile.Views
 
             if (response.IsSuccessStatusCode)
             {
-                var authJson = await response.Content.ReadAsStringAsync();
-
-                AuthResponse authResponse = JsonConvert.DeserializeObject<AuthResponse>(authJson);
-
-                Settings.Jwt = authResponse.Token;
-                Settings.UserId = authResponse.User.Id;
-
                 await DisplayAlert(null, "Success", "Ok");
             }
             else
             {
-                await DisplayAlert(null, "Failure", "Fail");
+                await DisplayAlert(null, "Failure", "Dismiss");
             }
         }
     }
