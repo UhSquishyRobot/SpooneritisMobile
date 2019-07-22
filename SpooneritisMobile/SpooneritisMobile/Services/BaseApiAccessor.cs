@@ -7,16 +7,17 @@ using SpooneritisMobile.Helpers;
 
 namespace SpooneritisMobile.Services
 {
-    public abstract class BaseApiAccessor
+    public sealed class BaseApiAccessor : IBaseApiAccessor
     {
         private static readonly string _baseUri = "https://spooneritis.herokuapp.com/";
-        private static readonly HttpClient _client = new HttpClient();
+        private HttpClient _client;
 
         public BaseApiAccessor()
         {
+            _client = new HttpClient();
         }
 
-        protected static Task<HttpResponseMessage> PostJson<T>(string url, T obj)
+        public Task<HttpResponseMessage> PostJson<T>(string url, T obj)
         {
             StringContent json = JsonEncode(obj);
 
@@ -25,14 +26,14 @@ namespace SpooneritisMobile.Services
             return _client.PostAsync(_baseUri + url, json);
         }
 
-        protected static Task<HttpResponseMessage> GetJson(string url)
+        public Task<HttpResponseMessage> GetJson(string url)
         {
             MaybeAddAuth();
 
             return _client.GetAsync(_baseUri + url);
         }
 
-        private static void MaybeAddAuth()
+        private void MaybeAddAuth()
         {
             var jwt = Settings.Jwt;
 

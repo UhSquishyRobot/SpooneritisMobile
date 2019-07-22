@@ -4,18 +4,25 @@ using System.Threading.Tasks;
 
 namespace SpooneritisMobile.Services
 {
-    public class RiddleService : BaseApiAccessor, IRiddleService
+    public class RiddleService : IRiddleService
     {
         private static readonly string _apiConnection = "riddles";
 
+        private readonly IBaseApiAccessor _baseApiAccessor;
+
+        public RiddleService(IBaseApiAccessor baseApiAccessor)
+        {
+            _baseApiAccessor = baseApiAccessor;
+        }
+
         public Task<HttpResponseMessage> CreateRiddle(Riddle riddle)
         {
-            return PostJson(_apiConnection, riddle);
+            return _baseApiAccessor.PostJson(_apiConnection, riddle);
         }
 
         public Task<HttpResponseMessage> GetRiddles()
         {
-            return GetJson(_apiConnection);
+            return _baseApiAccessor.GetJson(_apiConnection);
         }
     }
 }

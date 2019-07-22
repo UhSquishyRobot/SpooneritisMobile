@@ -6,13 +6,22 @@ using System.Threading.Tasks;
 
 namespace SpooneritisMobile.Services
 {
-    class AuthService : BaseApiAccessor, IAuthService
+    class AuthService : IAuthService
     {
         private static readonly string _apiConnection = "users/authenticate";
 
+        private readonly ISettingsProvider _settings;
+        private readonly IBaseApiAccessor _baseApiAccessor;
+
+        public AuthService(ISettingsProvider settings, IBaseApiAccessor baseApiAccessor)
+        {
+            _settings = settings;
+            _baseApiAccessor = baseApiAccessor;
+        }
+
         public async Task<HttpResponseMessage> Authenticate(User user)
         {
-            var response = await PostJson(_apiConnection, user);
+            var response = await _baseApiAccessor.PostJson(_apiConnection, user);
 
             if (response.IsSuccessStatusCode)
             {
@@ -20,8 +29,8 @@ namespace SpooneritisMobile.Services
 
                 AuthResponse authResponse = JsonConvert.DeserializeObject<AuthResponse>(authJson);
 
-                Settings.Jwt = authResponse.Token;
-                Settings.UserId = authResponse.User.Id;
+                _settings.SetItem(SettingTypes.Jwt, authResponse.Token);
+                _settings.SetItem(SettingTypes.UserId, authResponse.User.Id);
             }
 
             return response;

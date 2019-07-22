@@ -5,14 +5,17 @@ using System.Threading.Tasks;
 
 namespace SpooneritisMobile.Services
 {
-    public class AnswerService : BaseApiAccessor, IAnswerService
+    public class AnswerService : IAnswerService
     {
         private static readonly string _apiConnection = "answers";
-        private readonly ISettingsProvider _settings;
 
-        public AnswerService(ISettingsProvider settings)
+        private readonly ISettingsProvider _settings;
+        private readonly IBaseApiAccessor _baseApiAccessor;
+
+        public AnswerService(ISettingsProvider settings, IBaseApiAccessor baseApiAccessor)
         {
             _settings = settings;
+            _baseApiAccessor = baseApiAccessor;
         }
         
 
@@ -24,7 +27,7 @@ namespace SpooneritisMobile.Services
                 Solver = _settings.GetItem(SettingTypes.UserId)
             };
 
-            return PostJson(_apiConnection, answer);
+            return _baseApiAccessor.PostJson(_apiConnection, answer);
         }
     }
 }

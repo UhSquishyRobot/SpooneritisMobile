@@ -1,4 +1,5 @@
-﻿using SpooneritisMobile.Views;
+﻿using SpooneritisMobile.Services;
+using SpooneritisMobile.Views;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -12,7 +13,10 @@ namespace SpooneritisMobile
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new HomePage());
+            var settingsProvider = new SettingsProvider();
+            var baseApiAccessor = new BaseApiAccessor();
+
+            MainPage = new NavigationPage(new HomePage(settingsProvider, baseApiAccessor));
         }
 
         protected override void OnStart()

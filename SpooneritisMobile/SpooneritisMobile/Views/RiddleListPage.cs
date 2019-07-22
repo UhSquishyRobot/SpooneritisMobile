@@ -3,8 +3,6 @@ using Xamarin.Forms;
 using Newtonsoft.Json;
 using SpooneritisMobile.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System;
 
 namespace SpooneritisMobile.Views
 {
@@ -13,10 +11,12 @@ namespace SpooneritisMobile.Views
         private ListView _listView;
 
         private IRiddleService _riddleService;
+        private readonly IAnswerService _answerService;
 
-		public RiddleListPage (IRiddleService riddleService)
+        public RiddleListPage (IRiddleService riddleService, IAnswerService answerService)
 		{
             _riddleService = riddleService;
+            _answerService = answerService;
 
             Title = "Spooneritis";
 
@@ -45,7 +45,9 @@ namespace SpooneritisMobile.Views
 
         private async void NavigateToRiddlePage(object sender, SelectedItemChangedEventArgs e)
         {
-            await Navigation.PushAsync(new RiddlePage((Riddle)e.SelectedItem, new AnswerService()));
+            Riddle item = (Riddle)e.SelectedItem;
+
+            await Navigation.PushAsync(new RiddlePage(item, _answerService));
         }
     }
 }
